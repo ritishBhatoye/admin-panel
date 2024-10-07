@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import { LayoutDashboard, Users, ShoppingCart, Settings } from "lucide-react";
+import { LayoutDashboard, Users, ShoppingCart, Settings, Briefcase } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
@@ -16,6 +16,7 @@ const Sidebar = () => {
         <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" isActive={pathname === "/dashboard"} />
         <SidebarItem href="/users" icon={<Users size={20} />} label="Users" isActive={pathname === "/users"} />
         <SidebarItem href="/orders" icon={<ShoppingCart size={20} />} label="Orders" isActive={pathname === "/orders"} />
+        <SidebarItem href="/jobs" icon={<Briefcase size={20} />} label="Jobs" isActive={pathname === "/jobs"} />
         <SidebarItem href="/settings" icon={<Settings size={20} />} label="Settings" isActive={pathname === "/settings"} />
       </ul>
     </div>

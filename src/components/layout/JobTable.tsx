@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react"
 import {
@@ -39,115 +39,109 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import Image from "next/image"
+import { Badge } from "@/components/ui/badge";
 
-const users = [
-  { id: "1", name: "John Doe", email: "john@example.com", lastOrder: "2023-01-01", method: "Credit Card", avatar: "/avatars/avatar-1.png" },
-  { id: "2", name: "Alice Smith", email: "alice@example.com", lastOrder: "2023-02-15", method: "PayPal", avatar: "/avatars/avatar-2.png" },
-  { id: "3", name: "Bob Johnson", email: "bob@example.com", lastOrder: "2023-03-20", method: "Stripe", avatar: "/avatars/avatar-3.png" },
-  { id: "4", name: "Emma Brown", email: "emma@example.com", lastOrder: "2023-04-10", method: "Venmo", avatar: "/avatars/avatar-4.png" },
-  { id: "5", name: "Michael Davis", email: "michael@example.com", lastOrder: "2023-05-05", method: "Cash", avatar: "/avatars/avatar-5.png" },
-  { id: "6", name: "Sophia Wilson", email: "sophia@example.com", lastOrder: "2023-06-18", method: "Bank Transfer", avatar: "/avatars/avatar-6.png" },
-  { id: "7", name: "Liam Garcia", email: "liam@example.com", lastOrder: "2023-07-22", method: "Payoneer", avatar: "/avatars/avatar-7.png" },
-  { id: "8", name: "Olivia Martinez", email: "olivia@example.com", lastOrder: "2023-08-30", method: "Apple Pay", avatar: "/avatars/avatar-8.png" },
-]
+export type Job = {
+  id: string
+  title: string
+  status: "todo" | "in progress" | "done" | "canceled" | "backlog"
+  priority: "low" | "medium" | "high"
+  type: "bug" | "feature" | "documentation"
+}
 
-export type User = typeof users[0]
+const priorities = {
+  low: { label: "Low", icon: "↓" },
+  medium: { label: "Medium", icon: "→" },
+  high: { label: "High", icon: "↑" },
+}
 
-export const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => (
-      <div className="flex items-center">
-        <Image src={row.original.avatar} alt={row.getValue("name")} width={32} height={32} className="rounded-full mr-2" />
-        {row.getValue("name")}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div>{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "lastOrder",
-    header: "Last Order",
-    cell: ({ row }) => <div>{row.getValue("lastOrder")}</div>,
-  },
-  {
-    accessorKey: "method",
-    header: "Method",
-    cell: ({ row }) => <div>{row.getValue("method")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const user = row.original
+const statuses = {
+  todo: { label: "Todo", icon: "○" },
+  "in progress": { label: "In Progress", icon: "◔" },
+  done: { label: "Done", icon: "●" },
+  canceled: { label: "Canceled", icon: "○" },
+  backlog: { label: "Backlog", icon: "○" },
+}
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
-            >
-              Copy user ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View user details</DropdownMenuItem>
-            <DropdownMenuItem>Edit user</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
+interface JobTableProps {
+  jobs: Job[]
+}
 
-export function UsersTable() {
+export function JobTable({ jobs }: JobTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const columns: ColumnDef<Job>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "id",
+      header: "Task",
+      cell: ({ row }) => <div className="font-medium">{row.getValue("id")}</div>,
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => {
+        return (
+          <div className="flex space-x-2">
+            <Badge variant="outline">{row.original.type}</Badge>
+            <span className="max-w-[500px] truncate font-medium">
+              {row.getValue("title")}
+            </span>
+          </div>
+        )
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = statuses[row.getValue("status") as keyof typeof statuses]
+        return (
+          <div className="flex items-center">
+            {status.icon}
+            <span>{status.label}</span>
+          </div>
+        )
+      },
+    },
+    {
+      accessorKey: "priority",
+      header: "Priority",
+      cell: ({ row }) => {
+        const priority = priorities[row.getValue("priority") as keyof typeof priorities]
+        return (
+          <div className="flex items-center">
+            {priority.icon}
+            <span>{priority.label}</span>
+          </div>
+        )
+      },
+    },
+  ]
+
   const table = useReactTable({
-    data: users,
+    data: jobs,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -169,17 +163,17 @@ export function UsersTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter tasks..."
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+              View <ChevronDownIcon className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
