@@ -43,17 +43,8 @@ const jobs: Job[] = [
 export default function JobsPage() {
   return (
     <DashboardLayout>
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Welcome back!</h2>
-        </div>
-        <div className="hidden md:block">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-              <h2 className="text-lg font-semibold">Here's a list of your tasks for this month!</h2>
-            </div>
-          </div>
-        </div>
+      <div className="bg-background text-foreground min-h-screen p-8">
+        <h1 className="text-3xl font-bold mb-6">Jobs</h1>
         <JobTable jobs={jobs} />
       </div>
     </DashboardLayout>

@@ -160,7 +160,7 @@ export function JobTable({ jobs }: JobTableProps) {
   })
 
   return (
-    <div className="w-full">
+    <div className="bg-background text-foreground">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter tasks..."

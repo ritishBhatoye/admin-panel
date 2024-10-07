@@ -8,10 +8,7 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col w-64 bg-white text-black h-screen">
-      <div className="flex items-center justify-center h-20 shadow-md">
-        <h1 className="text-2xl font-semibold">Admin Panel</h1>
-      </div>
+    <div className="flex flex-col w-64 bg-background text-foreground h-screen">
       <ul className="flex flex-col py-4 space-y-1">
         <SidebarItem href="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" isActive={pathname === "/dashboard"} />
         <SidebarItem href="/users" icon={<Users size={20} />} label="Users" isActive={pathname === "/users"} />
@@ -36,8 +33,8 @@ const SidebarItem = ({ href, icon, label, isActive }: SidebarItemProps) => (
       href={href}
       className={`flex items-center px-6 py-3 transition-colors duration-200 ${
         isActive
-          ? "bg-black text-white"
-          : "text-gray-700 hover:bg-gray-100"
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground"
       }`}
     >
       <span className="mr-3">{icon}</span>
